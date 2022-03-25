@@ -1,0 +1,7 @@
+Restoring 1D fields to 3D fields
+-- see resto in tracer fields
+-- but, we don't want to restore the "silicates". See par_pisces.F90 for a list of constants (jpdia, jpsil, jpdsi). 
+-- In trcdmp.F90:103, add a continuation statement if jn matches one of those constants
+-- remember to update jptra if needed
+
+
