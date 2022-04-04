@@ -16,6 +16,13 @@
    cn_trcrst_out = "restart_trc"   !  suffix of pass. sn_tracer restart name (output)
    cn_trcrst_outdir = "."          !  directory to which to write output passive tracer restarts
 /
+!-----------------------------------------------------------------------
+&namtrc     !   tracers definition
+!-----------------------------------------------------------------------
+   ln_trcdta     =  .false.  !  Initialisation from data input file (T) or not (F)
+   ln_trcdmp     =  .false.  !  add a damping termn (T) or not (F)
+   ln_trcdmp_clo =  .false.  !  damping term (T) or not (F) on closed seas
+/
 !'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 !-----------------------------------------------------------------------
 &namtrc_dta      !    Initialisation from data input file
@@ -78,9 +85,9 @@
    sn_tracer(9)  = 'PON     ' , 'Small organic carbon Concentration     ',  'mol-C/L' ,  .true.     , .true.   ,  .false. ,  .false.  ,  .true.
    sn_tracer(10) = 'bSi     ' , 'biogenic Silicate Concentration        ',  'mol-C/L' ,  .true.     , .true.   ,  .false. ,  .false.  ,  .true.
    sn_tracer(11) = 'TRA     ' , 'River Tracer                           ',  'mol-C/L' ,  .false.    , .true.   ,  .false. ,  .false.  ,  .true.
-   sn_tracer(12) = 'DIC     ' , 'Dissolved Inorganic Carbon             ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
-   sn_tracer(13) = 'TA      ' , 'Total Alkalinity                       ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
-   sn_tracer(14) = 'O2      ' , 'Dissolved Oxygen                       ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
+   !sn_tracer(12) = 'DIC     ' , 'Dissolved Inorganic Carbon             ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
+   !sn_tracer(13) = 'TA      ' , 'Total Alkalinity                       ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
+   !sn_tracer(14) = 'O2      ' , 'Dissolved Oxygen                       ',  'mol-C/L' ,  .true.    , .true.   ,  .false. ,  .false.  ,  .true.
 
    ln_trcdta = .true.
    ln_trcdmp = .false.

@@ -34,8 +34,8 @@
    cp_cfg      =  "SalishSea"                 !  name of the configuration
    cp_cfz      =  "deep basin"            !  name of the zoom of configuration
    jp_cfg      =     120                 !  resolution of the configuration
-   jpidta      =       3                 !  1st lateral dimension ( >= jpi ) = 30*jp_cfg+2
-   jpjdta      =       3                 !  2nd    "         "    ( >= jpj ) = 20*jp_cfg+2 
+   jpidta      =     398                 !  1st lateral dimension ( >= jpi )
+   jpjdta      =     898                 !  2nd    "         "    ( >= jpj )
    jpkdta      =      40                 !  number of levels      ( >= jpk )
    jpiglo      =       3                 !  1st dimension of global domain --> i  = jpidta
    jpjglo      =       3                 !  2nd    -                  -    --> j  = jpjdta
@@ -98,7 +98,7 @@
 !-----------------------------------------------------------------------
    rn_lat1d    =      49.29 !  Column latitude
    rn_lon1d    =    -123.82 !  Column longitude
-   ln_c1d_locpt= .false.   ! Localization of 1D config in a grid (T) or independant point (F)
+   ln_c1d_locpt= .true.   ! Localization of 1D config in a grid (T) or independant point (F)
 /
 !-----------------------------------------------------------------------
 &namtsd    !   data : Temperature  & Salinity
@@ -123,6 +123,8 @@
    ln_ssr      = .false.   !  Sea Surface Restoring on T and/or S       (T => fill namsbc_ssr)
    ln_blk_core = .true.   !  CORE bulk formulation                     (T => fill namsbc_core)
    nn_fwb      = 0         !  FreshWater Budget: =0 unchecked
+
+   ln_apr_dyn  = .false.   !  Patm gradient added in ocean & ice Eqs.   (T => fill namsbc_apr )
 /
 !-----------------------------------------------------------------------
 &namsbc_ana    !   analytical surface boundary condition
@@ -141,15 +143,16 @@
 !-----------------------------------------------------------------------
 !              !  file name  ! frequency (hours) ! variable  ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
 !              !             !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
-  sn_wndi = 'forcing_SalishSea',                  1,           'u_wind',    .true.,       .false.,  'daily',    '', 'Uwnd'
-  sn_wndj = 'forcing_SalishSea',                  1,           'v_wind',    .true.,       .false.,  'daily',    '', 'Vwnd'
-  sn_qsr  = 'forcing_SalishSea',                  1,           'solar',     .true.,       .false.,  'daily',    '', ''
-  sn_qlw  = 'forcing_SalishSea',                  1,           'therm_rad', .true.,       .false.,  'daily',    '', ''
-  sn_tair = 'forcing_SalishSea',                  1,           'tair',      .true.,       .false.,  'daily',    '', ''
-  sn_humi = 'forcing_SalishSea',                  1,           'qair',      .true.,       .false.,  'daily',    '', ''
-  sn_prec = 'forcing_SalishSea',                  1,           'precip',    .true.,       .false.,  'daily',    '', ''
-  sn_snow = 'forcing_SalishSea',                  1,           'snow',      .true.,       .false.,  'daily',   '', ''
+  sn_wndi = 'ops',                  1,           'u_wind',    .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', 'Uwnd'
+  sn_wndj = 'ops',                  1,           'v_wind',    .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', 'Vwnd'
+  sn_qsr  = 'ops',                  1,           'solar',     .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', ''
+  sn_qlw  = 'ops',                  1,           'therm_rad', .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', ''
+  sn_tair = 'ops',                  1,           'tair',      .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', ''
+  sn_humi = 'ops',                  1,           'qair',      .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', ''
+  sn_prec = 'ops',                  1,           'precip',    .true.,       .false.,  'daily',    'weights-gem2.5-ops_201702.nc', ''
+  sn_snow = 'no_snow',            -12,           'snow',      .true.,       .true.,  'yearly',    'weights-gem2.5-ops_201702.nc', ''
 
+  cn_dir      = './ATMDATA/' 
    rn_zqt      = 2.      !  Air temperature and humidity reference height (m)
    rn_vfac     = 1.      !  new feature, lets use (0. for comparison, then switch to 1)
                          !  multiplicative factor for ocean/ice velocity
@@ -215,9 +218,20 @@
 !-----------------------------------------------------------------------
 /
 !-----------------------------------------------------------------------
-&nam_tide      !    tide parameters (#ifdef key_tide)
+&nam_tide      !   tide parameters (#ifdef key_tide)   see NEMO-3.6-code/NEMOGCM/NEMO/OPA_SRC/SBC/tideini.F90
+! Tidal parameters that we use to have to input are in OPA_SRC/SBC/tide.h90
 !-----------------------------------------------------------------------
-/
+   ln_tide_pot   = .false.  !  use tidal potential forcing
+   rdttideramp   =    0.    !
+   clname(1)     =   'M2'   !  name of constituent
+   clname(2)     =   'S2'
+   clname(3)     =   'N2'
+   clname(4)     =   'K1'
+   clname(5)     =   'O1'
+   clname(6)     =   'Q1'
+   clname(7)     =   'K2'
+   clname(8)     =   'P1'
+&end
 !-----------------------------------------------------------------------
 &nambdy        !  unstructured open boundaries                          ("key_bdy")
 !-----------------------------------------------------------------------
@@ -281,6 +295,20 @@
 !-----------------------------------------------------------------------
 /
 !-----------------------------------------------------------------------
+&nam_vvl    !   vertical coordinate options
+!-----------------------------------------------------------------------
+   ln_vvl_zstar  = .true.           !  zstar vertical coordinate
+   ln_vvl_ztilde = .false.          !  ztilde vertical coordinate: only high frequency variations
+   ln_vvl_layer  = .false.          !  full layer vertical coordinate
+   ln_vvl_ztilde_as_zstar = .false. !  ztilde vertical coordinate emulating zstar
+   ln_vvl_zstar_at_eqtor = .false.  !  ztilde near the equator
+   rn_ahe3       = 0.0e0            !  thickness diffusion coefficient
+   rn_rst_e3t    = 30.e0            !  ztilde to zstar restoration timescale [days]
+   rn_lf_cutoff  = 5.0e0            !  cutoff frequency for low-pass filter  [days]
+   rn_zdef_max   = 0.9e0            !  maximum fractional e3t deformation
+   ln_vvl_dbg    = .false.          !  debug prints    (T/F)
+/
+!-----------------------------------------------------------------------
 &namdyn_vor    !   option of physics/algorithm (not control by CPP keys)
 !-----------------------------------------------------------------------
 /
@@ -289,10 +317,10 @@
 !-----------------------------------------------------------------------
 !  file name  ! frequency (hours) ! variable  ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
 !             !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
-   sn_ucur     = 'ucurrent'  ,         1        ,'vozocrtx',   .true.    , .false. , 'daily' ,  ''      ,  'Ume'   , ''
-   sn_vcur     = 'vcurrent'  ,         1        ,'vomecrty',   .true.    , .false. , 'daily' ,  ''      ,  'Vme'   , ''
+   sn_ucur     = 'SalishSeaCast-VNR002_1d_grid_U'  ,         1        ,'vozocrtx',   .true.    , .false. , 'daily' ,  ''      ,  'Ume'   , ''
+   sn_vcur     = 'SalishSeaCast-VNR002_1d_grid_V'  ,         1        ,'vomecrty',   .true.    , .false. , 'daily' ,  ''      ,  'Vme'   , ''
 !
-   cn_dir        = './'    !  root directory for the location of the files
+   cn_dir        = './source_model/'    !  root directory for the location of the files
    ln_uvd_init   = .true. !  Initialisation of ocean U & V with U & V input data (T) or not (F)
    ln_uvd_dyndmp = .false. !  damping of ocean U & V toward U & V input data (T) or not (F)
 /
@@ -304,6 +332,13 @@
 !-----------------------------------------------------------------------
 &namdyn_hpg    !   Hydrostatic pressure gradient option
 !-----------------------------------------------------------------------
+   ln_hpg_zco  = .false.   !  z-coordinate - full steps
+   ln_hpg_zps  = .false.   !  z-coordinate - partial steps (interpolation)
+   ln_hpg_sco  = .false.   !  s-coordinate (standard jacobian formulation)
+   ln_hpg_djc  = .false.   !  s-coordinate (Density Jacobian with Cubic polynomial)
+   ln_hpg_prj  = .true.    !  s-coordinate (Pressure Jacobian scheme)
+   ln_dynhpg_imp = .false. !  time stepping: semi-implicit time scheme  (T)
+                           !                 centered      time scheme  (F)
 /
 !-----------------------------------------------------------------------
 !namdyn_spg    !   surface pressure gradient   (CPP key only)
@@ -316,7 +351,18 @@
 !-----------------------------------------------------------------------
 &namzdf        !   vertical physics
 !-----------------------------------------------------------------------
-   ln_zdfevd   = .false.        !  enhanced vertical diffusion (evd) (T) or not (F)
+   rn_avm0     =   1.e-6   !  vertical eddy viscosity   [m2/s]          (background Kz if not "key_zdfcst")
+   rn_avt0     =   1.e-6   !  vertical eddy diffusivity [m2/s]          (background Kz if not "key_zdfcst")
+   nn_avb      =    0      !  profile for background avt & avm (=1) or not (=0)
+   nn_havtb    =    0      !  horizontal shape for avtb (=1) or not (=0)
+   ln_zdfevd   = .false.   !  enhanced vertical diffusion (evd) (T) or not (F)
+   nn_evdm     =  1        !  evd apply on tracer (=0) or on tracer and momentum (=1)
+   rn_avevd    =  20.      !  evd mixing coefficient [m2/s]
+   ln_zdfnpc   = .false.   !  Non-Penetrative Convective algorithm (T) or not (F)
+   nn_npc      =    1      !  frequency of application of npc
+   nn_npcp     =  365      !  npc control print frequency
+   ln_zdfexp   = .false.   !  time-stepping: split-explicit (T) or implicit (F) time stepping
+   nn_zdfexp   =    3      !  number of sub-timestep for ln_zdfexp=T
 /
 !-----------------------------------------------------------------------
 &namzdf_ric    !   richardson number dependent vertical diffusion       ("key_zdfric" )
