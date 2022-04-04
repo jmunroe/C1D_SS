@@ -19,7 +19,7 @@
 !-----------------------------------------------------------------------
 &namtrc     !   tracers definition
 !-----------------------------------------------------------------------
-   ln_trcdta     =  .false.  !  Initialisation from data input file (T) or not (F)
+   ln_trcdta     =  .true.  !  Initialisation from data input file (T) or not (F)
    ln_trcdmp     =  .false.  !  add a damping termn (T) or not (F)
    ln_trcdmp_clo =  .false.  !  damping term (T) or not (F) on closed seas
 /
@@ -30,20 +30,20 @@
 !
 !                !  file name               ! frequency (hours) ! variable   ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
 !                !                          !  (if <0  months)  !   name     !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
-   sn_trcdta(1)  = 'restart_trc.nc'              ,        -12        ,  'TRNNO3'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(2)  = 'restart_trc.nc'              ,        -12        ,  'TRNNH4'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(3)  = 'restart_trc.nc'              ,        -12        ,  'TRNSi'      ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(4)  = 'restart_trc.nc'              ,        -12        ,  'TRNDIAT'    ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(5)  = 'restart_trc.nc'              ,        -12        ,  'TRNPHY'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(6)  = 'restart_trc.nc'              ,        -12        ,  'TRNMYRI'    ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(7)  = 'restart_trc.nc'              ,        -12        ,  'TRNMICZ'    ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(8)  = 'restart_trc.nc'              ,        -12        ,  'TRNDON'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(9)  = 'restart_trc.nc'              ,        -12        ,  'TRNPON'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(10) = 'restart_trc.nc'              ,        -12        ,  'TRNbSi'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(11) = 'restart_trc.nc'              ,        -12        ,  'TRNTRA'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(12) = 'restart_trc.nc'              ,        -12        ,  'TRNDIC'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(13) = 'restart_trc.nc'              ,        -12        ,  'TRNTA'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
-   sn_trcdta(14) = 'restart_trc.nc'              ,        -12        ,  'TRNO2'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
+   sn_trcdta(1)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'nitrate'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(2)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'ammonium'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(3)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'silicon'      ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(4)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'diatoms'    ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(5)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'flagellates'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(6)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'ciliates'    ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(7)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'microzooplankton'    ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(8)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'dissolved_organic_nitrogen'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(9)  = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'particulate_organic_nitrogen'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(10) = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'biogenic_silicon'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   sn_trcdta(11) = 'source_model/SalishSeaCast-VNR002_1h_ptrc'              ,        1        ,  'mesozooplankton'     ,    .false.   , .false. , 'daily'  , ''       , ''       , ''
+   !sn_trcdta(12) = 'restart_trc.nc'              ,        -12        ,  'TRNDIC'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
+   !sn_trcdta(13) = 'restart_trc.nc'              ,        -12        ,  'TRNTA'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
+   !sn_trcdta(14) = 'restart_trc.nc'              ,        -12        ,  'TRNO2'     ,    .false.   , .true. , 'yearly'  , ''       , ''       , ''
 
 
    rn_trfac(1)   =  1.0  !  -      -      -     -
@@ -57,9 +57,9 @@
    rn_trfac(9)   =  1.0  !  -      -      -     -
    rn_trfac(10)  =  1.0  !  -      -      -     -
    rn_trfac(11)  =  1.0  !  -      -      -     -
-   rn_trfac(12)  =  1.0  !  -      -      -     -
-   rn_trfac(13)  =  1.0  !  -      -      -     -
-   rn_trfac(14)  =  1.0  !  -      -      -     -
+   !rn_trfac(12)  =  1.0  !  -      -      -     -
+   !rn_trfac(13)  =  1.0  !  -      -      -     -
+   !rn_trfac(14)  =  1.0  !  -      -      -     -
 
    cn_dir='./'
 /
