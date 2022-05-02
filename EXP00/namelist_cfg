@@ -23,7 +23,7 @@
    cn_exp      =  "SalishSea"   !  experience name
    nn_it000    =       1   !  first time step
    nn_itend    =    2160   !  last  time step
-   nn_date0    =  20160201 !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
+   nn_date0    =  20160202 !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
    nn_leapy    =       1   !  Leap year calendar (1) or not (0)
    nn_stock    =    1080   !  frequency of creation of a restart file (modulo referenced to 1)
    nn_write    =     90    !  frequency of write in the output file   (modulo referenced to nn_it000)
@@ -120,10 +120,10 @@
 !-----------------------------------------------------------------------
 !          !  file name  ! frequency (hours) ! variable  ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
 !          !             !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
-   sn_tem  = 'init_SalishSeaCast',   24        ,'votemper' ,  .false.     , .true.,  'daily'  , ''       , ' '        , ''
-   sn_sal  = 'init_SalishSeaCast',   24        ,'vosaline' ,  .false.     , .true.,  'daily'  , ''       , ' '        , ''
+   sn_tem  = 'SalishSeaCast-VNR002_1h_grid_T',   1        ,'votemper' ,  .false.     , .false.,  'daily'  , ''       , ' '        , ''
+   sn_sal  = 'SalishSeaCast-VNR002_1h_grid_T',   1        ,'vosaline' ,  .false.     , .false.,  'daily'  , ''       , ' '        , ''
    !
-   cn_dir        = './'     !  root directory for the location of the runoff files
+   cn_dir        = './source_model/'     !  root directory for the location of the runoff files
    ln_tsd_init   = .true.   !  Initialisation of ocean T & S with T &S input data (T) or not (F)
    ln_tsd_tradmp = .false.   !  damping of ocean T & S toward T &S input data (T) or not (F)
 /
@@ -142,8 +142,11 @@
    ln_apr_dyn  = .true.   !  Patm gradient added in ocean & ice Eqs.   (T => fill namsbc_apr )
 /
 !-----------------------------------------------------------------------
+
 &namsbc_ana    !   analytical surface boundary condition
 !-----------------------------------------------------------------------
+   nn_tau000   =   0     !  gently increase the stress over the first ntau_rst time-steps
+   rn_utau0    =   0.0     !  uniform value for the i-stress
 /
 !-----------------------------------------------------------------------
 &namsbc_flx    !   surface boundary condition : flux formulation
@@ -382,8 +385,8 @@
 !-----------------------------------------------------------------------
 !  file name  ! frequency (hours) ! variable  ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
 !             !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
-   sn_ucur     = 'SalishSeaCast-VNR002_1d_grid_U'  ,         1        ,'vozocrtx',   .true.    , .false. , 'daily' ,  ''      ,  'Ume'   , ''
-   sn_vcur     = 'SalishSeaCast-VNR002_1d_grid_V'  ,         1        ,'vomecrty',   .true.    , .false. , 'daily' ,  ''      ,  'Vme'   , ''
+   sn_ucur     = 'SalishSeaCast-VNR002_1h_grid_U'  ,         1       ,'vozocrtx',   .false.    , .false. , 'daily' ,  ''      ,  'Ume'   , ''
+   sn_vcur     = 'SalishSeaCast-VNR002_1h_grid_V'  ,         1       ,'vomecrty',   .false.    , .false. , 'daily' ,  ''      ,  'Vme'   , ''
 !
    cn_dir        = './source_model/'    !  root directory for the location of the files
    ln_uvd_init   = .true. !  Initialisation of ocean U & V with U & V input data (T) or not (F)
