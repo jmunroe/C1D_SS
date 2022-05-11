@@ -144,15 +144,16 @@ CONTAINS
       ! final adjustment of mbathy & check 
       ! -----------------------------------
       IF( lzoom       )   CALL zgr_bat_zoom     ! correct mbathy in case of zoom subdomain
-      IF( .NOT.lk_c1d )   CALL zgr_bat_ctl      ! check bathymetry (mbathy) and suppress isolated ocean points
-                          CALL zgr_bot_level    ! deepest ocean level for t-, u- and v-points
-                          CALL zgr_top_level    ! shallowest ocean level for T-, U-, V- points
-      !
+
       IF( lk_c1d ) THEN                         ! 1D config.: same mbathy value over the 3x3 domain
          ibat = mbathy(2,2)
          mbathy(:,:) = ibat
       END IF
-      !
+
+      IF( .NOT.lk_c1d )   CALL zgr_bat_ctl      ! check bathymetry (mbathy) and suppress isolated ocean points
+                          CALL zgr_bot_level    ! deepest ocean level for t-, u- and v-points
+                          CALL zgr_top_level    ! shallowest ocean level for T-, U-, V- points
+      
       IF( nprint == 1 .AND. lwp )   THEN
          WRITE(numout,*) ' MIN val mbathy ', MINVAL( mbathy(:,:) ), ' MAX ', MAXVAL( mbathy(:,:) )
          WRITE(numout,*) ' MIN val depth t ', MINVAL( gdept_0(:,:,:) ),   &
