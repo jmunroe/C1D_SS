@@ -1,0 +1,2 @@
+rm SalishSea_*
+./opa
